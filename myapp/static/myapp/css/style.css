@@ -1,0 +1,27 @@
+/* myapp/static/myapp/css/style.css */
+body {
+    background-color: #e9ecef; /* Un fondo más suave */
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.card {
+    margin-top: 20px;
+    border-radius: 0.5rem;
+}
+
+.form-control {
+    border-radius: 0.25rem;
+}
+
+.btn {
+    border-radius: 0.25rem;
+}
+
+/* Estilos para mensajes de Django */
+.messages .alert {
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+}

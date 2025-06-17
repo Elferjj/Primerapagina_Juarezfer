@@ -1,0 +1,68 @@
+{% extends 'myapp/base.html' %}
+
+{% block titulo %}Resultados de Búsqueda{% endblock %}
+
+{% block contenido %}
+<h2 class="mb-4">Resultados de Búsqueda</h2>
+
+<div class="card shadow-sm p-4 mb-4">
+    <h5 class="card-title">Realizar otra búsqueda</h5>
+    <form method="get" class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Search" name="query" value="{{ query|default_if_none:'' }}">
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
+    </form>
+</div>
+
+{% if query %}
+    {% if resultados.clientes or resultados.productos or resultados.sucursales or resultados.vendedores %}
+        {% if resultados.clientes %}
+            <h3 class="mt-4">Clientes</h3>
+            <ul class="list-group">
+                {% for cliente in resultados.clientes %}
+                    <li class="list-group-item">{{ cliente.nombre }} {{ cliente.apellido }} ({{ cliente.email }})</li>
+                {% empty %}
+                    <li class="list-group-item text-muted">No se encontraron clientes.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if resultados.productos %}
+            <h3 class="mt-4">Productos</h3>
+            <ul class="list-group">
+                {% for producto in resultados.productos %}
+                    <li class="list-group-item">{{ producto.nombre }} - ${{ producto.precio }} (Stock: {{ producto.stock }})</li>
+                {% empty %}
+                    <li class="list-group-item text-muted">No se encontraron productos.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if resultados.sucursales %}
+            <h3 class="mt-4">Sucursales</h3>
+            <ul class="list-group">
+                {% for sucursal in resultados.sucursales %}
+                    <li class="list-group-item">{{ sucursal.nombre }} ({{ sucursal.direccion }})</li>
+                {% empty %}
+                    <li class="list-group-item text-muted">No se encontraron sucursales.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if resultados.vendedores %}
+            <h3 class="mt-4">Vendedores</h3>
+            <ul class="list-group">
+                {% for vendedor in resultados.vendedores %}
+                    <li class="list-group-item">{{ vendedor.nombre }} {{ vendedor.apellido }} (Código: {{ vendedor.codigo_empleado }})</li>
+                {% empty %}
+                    <li class="list-group-item text-muted">No se encontraron vendedores.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% else %}
+        <p class="alert alert-info">No se encontraron resultados para "{{ query }}".</p>
+    {% endif %}
+{% else %}
+    <p class="alert alert-secondary">Ingresa un término de búsqueda en el campo de arriba.</p>
+{% endif %}
+
+{% endblock %}
