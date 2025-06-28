@@ -1,0 +1,26 @@
+{% extends 'myapp/base.html' %}
+
+{% block titulo %}Sobre Ohfer - El Creador{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm p-4 mt-4">
+            <h2 class="card-title text-center mb-4">Sobre Ohfer y su Creador</h2>
+            <p class="lead text-center">
+                <strong>{{ creador_nombre }}</strong> es quien estuvo bajo este proyecto,
+                mismo actualmente se dedica como {{ creador_profesion }}
+                y que {{ dedicacion_curso }}
+            </p>
+            <hr>
+            <p class="text-muted text-center">
+                {{ objetivo_web }}
+            </p>
+            <div class="text-center mt-4">
+                <img src="{% static 'myapp/img/fer.jpg' %}" alt="Foto del Creador" class="img-fluid rounded-circle" style="max-width: 150px; height: 150px; object-fit: cover;">
+                <p class="mt-2 text-muted small">¡Gracias por visitar!</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

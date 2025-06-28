@@ -4,6 +4,9 @@ from django.contrib import messages # Para mensajes de éxito/error
 from .forms import ClienteForm, ProductoForm, SucursalForm, VendedorForm, BusquedaForm
 from .models import Cliente, Producto, Sucursal, Vendedor
 from django.db.models import Q # Para búsquedas OR
+from django.contrib.auth.decorators import login_required # Para el perfil
+from django.contrib.auth.forms import UserChangeForm # Para modificar usuario base de Django
+from django.contrib.auth.models import User # Para el modelo de usuario base
 
 def home(request):
     return render(request, 'myapp/home.html')
@@ -88,3 +91,12 @@ def buscar_resultados(request):
         'resultados': resultados,
         'query': query
     })
+
+def about(request):
+    context = {
+        'creador_nombre': 'Juarez Fernando Gabriel',
+        'creador_profesion': 'Policía de la Provincia de Buenos Aires',
+        'dedicacion_curso': 'dedicó mucho tiempo y dedicación al curso.',
+        'objetivo_web': 'Básicamente quería crear una web donde personas puedan encontrarse en una sucursal de videojuegos y poder hacer ventas de sus productos electrónicos.'
+    }
+    return render(request, 'myapp/about.html', context)
