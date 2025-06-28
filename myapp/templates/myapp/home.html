@@ -1,17 +1,16 @@
-{% extends 'myapp/base.html' %} {# ¡Extiende el template base! #}
+{% extends 'myapp/base.html' %}
 {% load static %}
-{% block titulo %}Página Principal{% endblock %}
+
+{% block titulo %}Ohfer - Inicio{% endblock %} {# Nuevo título para la pestaña del navegador #}
 
 {% block contenido %}
 <div class="text-center py-5">
-    <h1 class="display-4 mb-4">Bienvenido a Mi Aplicación Django</h1>
-    <p class="lead">
-        Esta es una aplicación de ejemplo para gestionar clientes, productos, sucursales y vendedores.
-    </p>
-    <img src="{% static 'myapp/css/img/django_Logo.png' %}" alt="Logo Django" class="img-fluid my-4" style="max-height: 200px;">
+    <h1 class="display-4 mb-3 text-primary">Ohfer</h1> {# Título principal #}
+    <p class="lead mb-4 text-secondary">Sucursales de ventas de videojuegos y productos electrónicos</p> {# Subtítulo #}
+    <img src="{% static 'myapp/img/django_logo.png' %}" alt="Logo Django" class="img-fluid my-4" style="max-height: 200px;">
     <div class="d-grid gap-2 col-6 mx-auto">
-        <a href="{% url 'crear_cliente' %}" class="btn btn-primary btn-lg">Crear Nuevo Cliente</a>
-        <a href="{% url 'buscar_resultados' %}" class="btn btn-secondary btn-lg">Buscar Elementos</a>
+        <a href="{% url 'crear_producto' %}" class="btn btn-primary btn-lg">Publicar Producto</a> {# Cambiamos el botón principal #}
+        <a href="{% url 'buscar_resultados' %}" class="btn btn-secondary btn-lg">Buscar Productos</a>
     </div>
 </div>
 {% endblock %}
