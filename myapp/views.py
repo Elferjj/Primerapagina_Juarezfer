@@ -1,12 +1,19 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.shortcuts import render, redirect , get_object_or_404
+from django.urls import reverse_lazy
 from django.contrib import messages # Para mensajes de éxito/error
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import AuthenticationForm
 from .forms import ClienteForm, ProductoForm, SucursalForm, VendedorForm, BusquedaForm
 from .models import Cliente, Producto, Sucursal, Vendedor
 from django.db.models import Q # Para búsquedas OR
 from django.contrib.auth.decorators import login_required # Para el perfil
 from django.contrib.auth.forms import UserChangeForm # Para modificar usuario base de Django
 from django.contrib.auth.models import User # Para el modelo de usuario base
+from .forms import (
+    ClienteForm, ProductoForm, SucursalForm, VendedorForm, BusquedaForm,
+    CustomUserCreationForm, PerfilUsuarioForm, UserEditForm
+)
+from .models import Cliente, Producto, Sucursal, Vendedor, PerfilUsuario
 
 def home(request):
     return render(request, 'myapp/home.html')
@@ -100,3 +107,69 @@ def about(request):
         'objetivo_web': 'Básicamente quería crear una web donde personas puedan encontrarse en una sucursal de videojuegos y poder hacer ventas de sus productos electrónicos.'
     }
     return render(request, 'myapp/about.html', context)
+
+def registro(request):
+    if request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, f"Cuenta creada para {user.username}. ¡Ya puedes iniciar sesión!")
+            login(request, user) # Opcional: Iniciar sesión automáticamente después del registro
+            return redirect('home')
+        else:
+            messages.error(request, "Error al registrar el usuario. Por favor, revisa los datos.")
+    else:
+        form = CustomUserCreationForm()
+    return render(request, "myapp/registro.html", {"form": form})
+
+def login_request(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"Has iniciado sesión como {username}.")
+                return redirect('home')
+            else:
+                messages.error(request, "Usuario o contraseña incorrectos.")
+        else:
+            messages.error(request, "Usuario o contraseña incorrectos.")
+    form = AuthenticationForm()
+    return render(request, "myapp/login.html", {"form": form})
+
+@login_required
+def logout_request(request):
+    logout(request)
+    messages.info(request, "Has cerrado sesión correctamente.")
+    return redirect('home')
+
+@login_required
+def perfil_usuario(request):
+    user_form = UserEditForm(instance=request.user)
+    perfil_form = PerfilUsuarioForm(instance=request.user.perfilusuario)
+
+    if request.method == 'POST':
+        user_form = UserEditForm(request.POST, instance=request.user)
+        perfil_form = PerfilUsuarioForm(request.POST, request.FILES, instance=request.user.perfilusuario)
+
+        if user_form.is_valid() and perfil_form.is_valid():
+            user_form.save()
+            perfil_form.save()
+            messages.success(request, 'Tu perfil ha sido actualizado correctamente!')
+            return redirect('perfil_usuario')
+        else:
+            messages.error(request, 'Error al actualizar el perfil. Por favor, revisa los datos.')
+
+    return render(request, 'myapp/perfil_usuario.html', {
+        'user_form': user_form,
+        'perfil_form': perfil_form
+    })
+
+# Vista para ver el perfil de otro usuario (opcional)
+def ver_perfil(request, username):
+    usuario_a_ver = get_object_or_404(User, username=username)
+    return render(request, 'myapp/ver_perfil.html', {'usuario': usuario_a_ver})
+
