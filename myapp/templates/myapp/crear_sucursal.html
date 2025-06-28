@@ -1,0 +1,19 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block titulo %}Crear Nueva Sucursal{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm p-4 mt-4">
+            <h2 class="card-title text-center mb-4">Crear Nueva Sucursal</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary w-100 mt-3">Guardar Sucursal</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

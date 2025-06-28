@@ -1,0 +1,31 @@
+{% extends 'myapp/base.html' %}
+
+{% block titulo %}Nuestras Sucursales{% endblock %}
+
+{% block contenido %}
+<h2 class="mb-4">Nuestras Sucursales</h2>
+
+{% if sucursales %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for sucursal in sucursales %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ sucursal.nombre }}</h5>
+                    <p class="card-text"><i class="fas fa-map-marker-alt"></i> {{ sucursal.direccion }}</p>
+                    {% if sucursal.telefono %}
+                        <p class="card-text"><i class="fas fa-phone"></i> {{ sucursal.telefono }}</p>
+                    {% endif %}
+                    {# Opcional: link a Google Maps o más detalles de la sucursal #}
+                    {# <a href="#" class="btn btn-outline-primary btn-sm">Ver en Mapa</a> #}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info" role="alert">
+        No hay sucursales registradas aún.
+    </div>
+{% endif %}
+{% endblock %}

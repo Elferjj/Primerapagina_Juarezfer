@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 #from django.utils import timezone
 
 
@@ -61,7 +63,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 @receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
+def create_user_profile(sender, instance, created, **kwargs):
     if created:
         PerfilUsuario.objects.create(user=instance)
-    instance.perfilusuario.save() # Asegura que se actualice si ya existe
+   
+

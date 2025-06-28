@@ -1,16 +1,23 @@
 {% extends 'myapp/base.html' %}
 {% load static %}
 
-{% block titulo %}Ohfer - Inicio{% endblock %} {# Nuevo título para la pestaña del navegador #}
+{% block titulo %}Inicio{% endblock %}
 
 {% block contenido %}
-<div class="text-center py-5">
-    <h1 class="display-4 mb-3 text-primary">Ohfer</h1> {# Título principal #}
-    <p class="lead mb-4 text-secondary">Sucursales de ventas de videojuegos y productos electrónicos</p> {# Subtítulo #}
-    <img src="{% static 'myapp/img/django_logo.png' %}" alt="Logo Django" class="img-fluid my-4" style="max-height: 200px;">
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <a href="{% url 'crear_producto' %}" class="btn btn-primary btn-lg">Publicar Producto</a> {# Cambiamos el botón principal #}
-        <a href="{% url 'buscar_resultados' %}" class="btn btn-secondary btn-lg">Buscar Productos</a>
-    </div>
+<div class="jumbotron text-center bg-light py-5">
+    <h1 class="display-4">¡Bienvenido a Ohfer!</h1>
+    <p class="lead">Tu plataforma para explorar y gestionar productos y clientes.</p>
+    <hr class="my-4">
+    <p>Empieza a explorar o a gestionar tu negocio.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'lista_productos' %}" role="button">Ver Productos</a>
+    <a class="btn btn-success btn-lg" href="{% url 'crear_producto' %}" role="button">Crear Producto</a>
+
+    
+    {% if user.is_authenticated %} {# Opcional: mostrar solo si el usuario está logueado #}
+    <a class="btn btn-info btn-lg mt-2" href="{% url 'crear_sucursal' %}" role="button">Crear Sucursal</a>
+    {% endif %}
+    {# ------------------------- #}
+
 </div>
+
 {% endblock %}

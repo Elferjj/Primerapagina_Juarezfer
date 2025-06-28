@@ -1,4 +1,5 @@
 {% extends 'myapp/base.html' %}
+{% load static %}
 
 {% block titulo %}Sobre Ohfer - El Creador{% endblock %}
 
@@ -17,7 +18,7 @@
                 {{ objetivo_web }}
             </p>
             <div class="text-center mt-4">
-                <img src="{% static 'myapp/img/fer.jpg' %}" alt="Foto del Creador" class="img-fluid rounded-circle" style="max-width: 150px; height: 150px; object-fit: cover;">
+                <img src="{% static 'myapp/img/tu_foto_aqui.png' %}" alt="Foto del Creador" class="img-fluid rounded-circle" style="max-width: 150px; height: 150px; object-fit: cover;"> {# <-- Aquí se usa static #}
                 <p class="mt-2 text-muted small">¡Gracias por visitar!</p>
             </div>
         </div>

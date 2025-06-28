@@ -61,23 +61,31 @@ class CustomUserCreationForm(UserCreationForm):
     phone_number = forms.CharField(label="Número de teléfono", max_length=20, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: +5491112345678'}))
 
     class Meta(UserCreationForm.Meta):
-        model = User # Usaremos el modelo User por defecto de Django
+        model = User
         fields = UserCreationForm.Meta.fields + ('email', 'first_name', 'last_name', 'phone_number',)
 
     def save(self, commit=True):
-        user = super().save(commit=False)
+        
+        user = super().save(commit=False) # Importante: No guardar en la base de datos aún
+
+    
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
-        user.email = self.cleaned_data['email'] # Guardamos el email
+        user.email = self.cleaned_data['email']
+
         if commit:
-            user.save()
-            # Creamos el perfil de usuario extendido
-            perfil = PerfilUsuario.objects.create(user=user, telefono=self.cleaned_data['phone_number'])
-            perfil.save()
+            user.save() 
+
+            
+            if self.cleaned_data['phone_number']:
+                
+                user.perfilusuario.telefono = self.cleaned_data['phone_number']
+                user.perfilusuario.save()
+
         return user
 
 
-# Para modificar los campos extra del perfil
+
 class PerfilUsuarioForm(forms.ModelForm):
     class Meta:
         model = PerfilUsuario

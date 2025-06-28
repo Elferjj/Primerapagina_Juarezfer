@@ -1,19 +1,24 @@
 from django.shortcuts import render, redirect , get_object_or_404
-from django.urls import reverse_lazy
-from django.contrib import messages # Para mensajes de éxito/error
+from django.urls import reverse
+from django.contrib import messages 
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from .forms import ClienteForm, ProductoForm, SucursalForm, VendedorForm, BusquedaForm
 from .models import Cliente, Producto, Sucursal, Vendedor
 from django.db.models import Q # Para búsquedas OR
-from django.contrib.auth.decorators import login_required # Para el perfil
-from django.contrib.auth.forms import UserChangeForm # Para modificar usuario base de Django
-from django.contrib.auth.models import User # Para el modelo de usuario base
+from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.forms import UserChangeForm 
+from django.contrib.auth.models import User 
 from .forms import (
     ClienteForm, ProductoForm, SucursalForm, VendedorForm, BusquedaForm,
     CustomUserCreationForm, PerfilUsuarioForm, UserEditForm
 )
 from .models import Cliente, Producto, Sucursal, Vendedor, PerfilUsuario
+from django.db import IntegrityError
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils import timezone
+
 
 def home(request):
     return render(request, 'myapp/home.html')
@@ -175,7 +180,7 @@ def ver_perfil(request, username):
 
 def lista_productos_por_cliente(request):
     # Obtener usuarios que han publicado al menos un producto
-    # .distinct() es importante para evitar duplicados si un usuario tiene muchos productos
+    # El related_name='productos_publicados' del ForeignKey en Producto ayuda aquí.
     usuarios_con_productos = User.objects.filter(productos_publicados__isnull=False).distinct()
     return render(request, 'myapp/lista_productos_por_cliente.html', {'usuarios_con_productos': usuarios_con_productos})
 
@@ -241,3 +246,19 @@ def lista_productos_por_cliente(request):
     # Obtener usuarios que han publicado al menos un producto
     usuarios_con_productos = User.objects.filter(productos_publicados__isnull=False).distinct()
     return render(request, 'myapp/lista_productos_por_cliente.html', {'usuarios_con_productos': usuarios_con_productos})
+
+def lista_sucursales(request):
+    sucursales = Sucursal.objects.all().order_by('nombre')
+    return render(request, 'myapp/lista_sucursales.html', {'sucursales': sucursales})
+
+@login_required
+def crear_sucursal(request):
+    if request.method == 'POST':
+        form = SucursalForm(request.POST)
+        if form.is_valid():
+            sucursal = form.save()
+            messages.success(request, f'Sucursal "{sucursal.nombre}" creada exitosamente.')
+            return redirect('lista_sucursales') # Redirigir a una lista de sucursales o a otra página
+    else:
+        form = SucursalForm()
+    return render(request, 'myapp/crear_sucursal.html', {'form': form})
