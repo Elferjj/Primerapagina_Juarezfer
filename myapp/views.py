@@ -237,3 +237,7 @@ def eliminar_producto(request, pk):
         return redirect('home') # O a la lista de productos
     return render(request, 'myapp/confirm_delete.html', {'objeto': producto})
 
+def lista_productos_por_cliente(request):
+    # Obtener usuarios que han publicado al menos un producto
+    usuarios_con_productos = User.objects.filter(productos_publicados__isnull=False).distinct()
+    return render(request, 'myapp/lista_productos_por_cliente.html', {'usuarios_con_productos': usuarios_con_productos})

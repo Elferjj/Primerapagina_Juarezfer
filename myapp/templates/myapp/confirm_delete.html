@@ -1,0 +1,21 @@
+{% extends 'myapp/base.html' %}
+
+{% block titulo %}Confirmar Eliminación{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm p-4 mt-4 text-center">
+            <h2 class="card-title text-danger mb-4">¿Estás seguro de que quieres eliminar?</h2>
+            <p class="lead">Estás a punto de eliminar: <strong>{{ objeto }}</strong></p>
+            <p class="text-muted">Esta acción no se puede deshacer.</p>
+
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger me-2">Sí, Eliminar</button>
+                <a href="javascript:history.back()" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

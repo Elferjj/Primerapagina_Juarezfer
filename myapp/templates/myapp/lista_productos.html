@@ -1,0 +1,37 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block titulo %}Todos los Productos{% endblock %}
+
+{% block contenido %}
+<h2 class="mb-4">Productos en Venta</h2>
+
+{% if productos %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for producto in productos %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'myapp/img/default_product.png' %}" class="card-img-top" alt="Producto sin imagen" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <p class="card-text text-muted small">Publicado por <a href="{% url 'ver_perfil' username=producto.autor.username %}">@{{ producto.autor.username }}</a> el {{ producto.fecha_publicacion|date:"d M, Y" }}</p>
+                    <p class="card-text"><strong>Precio:</strong> ${{ producto.precio }}</p>
+                    <p class="card-text"><strong>Stock:</strong> {{ producto.stock }}</p>
+                    <div class="mt-auto">
+                        <a href="{% url 'detalle_producto' producto.pk %}" class="btn btn-primary btn-sm">Ver Más</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info" role="alert">
+        No hay productos publicados aún. ¡Sé el primero en <a href="{% url 'crear_producto' %}" class="alert-link">publicar uno</a>!
+    </div>
+{% endif %}
+{% endblock %}
