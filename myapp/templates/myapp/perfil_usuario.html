@@ -1,0 +1,36 @@
+{% extends 'myapp/base.html' %}
+{% load crispy_forms_tags %} {# Si usas crispy-forms #}
+{% load static %}
+
+{% block titulo %}Mi Perfil{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm p-4 mt-4">
+            <h2 class="card-title text-center mb-4">Mi Perfil</h2>
+            <div class="text-center mb-4">
+                {% if user.perfilusuario.avatar %}
+                    <img src="{{ user.perfilusuario.avatar.url }}" alt="Avatar de {{ user.username }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'myapp/img/default_avatar.png' %}" alt="Avatar por defecto" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                {% endif %}
+                <h3 class="mt-2">{{ user.username }}</h3>
+                <p class="text-muted">{{ user.email }}</p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data"> {# IMPORTANTE: enctype para subir archivos #}
+                {% csrf_token %}
+
+                <h4>Datos de Usuario:</h4>
+                {{ user_form|crispy }}
+
+                <h4 class="mt-4">Datos de Perfil:</h4>
+                {{ perfil_form|crispy }}
+
+                <button type="submit" class="btn btn-primary w-100 mt-4">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

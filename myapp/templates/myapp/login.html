@@ -1,0 +1,22 @@
+{% extends 'myapp/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block titulo %}Iniciar Sesión en Ohfer{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm p-4 mt-4">
+            <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }} 
+                <button type="submit" class="btn btn-success w-100 mt-3">Iniciar Sesión</button>
+            </form>
+            <small class="text-muted text-center mt-3">
+                ¿No tienes una cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a>
+            </small>
+        </div>
+    </div>
+</div>
+{% endblock %}
