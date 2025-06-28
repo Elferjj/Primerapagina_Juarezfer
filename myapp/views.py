@@ -173,3 +173,67 @@ def ver_perfil(request, username):
     usuario_a_ver = get_object_or_404(User, username=username)
     return render(request, 'myapp/ver_perfil.html', {'usuario': usuario_a_ver})
 
+def lista_productos_por_cliente(request):
+    # Obtener usuarios que han publicado al menos un producto
+    # .distinct() es importante para evitar duplicados si un usuario tiene muchos productos
+    usuarios_con_productos = User.objects.filter(productos_publicados__isnull=False).distinct()
+    return render(request, 'myapp/lista_productos_por_cliente.html', {'usuarios_con_productos': usuarios_con_productos})
+
+def lista_sucursales(request):
+    sucursales = Sucursal.objects.all().order_by('nombre')
+    return render(request, 'myapp/lista_sucursales.html', {'sucursales': sucursales})
+
+@login_required # Solo usuarios logueados pueden crear productos
+def crear_producto(request):
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES) # IMPORTANTE: request.FILES para la imagen
+        if form.is_valid():
+            producto = form.save(commit=False)
+            producto.autor = request.user # Asigna el usuario logueado como autor
+            producto.save()
+            messages.success(request, 'Producto publicado con éxito!')
+            return redirect('detalle_producto', pk=producto.pk) # Redirige al detalle
+    else:
+        form = ProductoForm()
+    return render(request, 'myapp/form_producto.html', {'form': form, 'titulo': 'Publicar Producto'})
+
+def lista_productos(request):
+    productos = Producto.objects.all().order_by('-fecha_publicacion') # Los más nuevos primero
+    return render(request, 'myapp/lista_productos.html', {'productos': productos})
+
+def detalle_producto(request, pk):
+    producto = get_object_or_404(Producto, pk=pk)
+    return render(request, 'myapp/detalle_producto.html', {'producto': producto})
+
+@login_required
+def editar_producto(request, pk):
+    producto = get_object_or_404(Producto, pk=pk)
+    # Verificar si el usuario logueado es el autor del producto
+    if request.user != producto.autor:
+        messages.error(request, 'No tienes permiso para editar este producto.')
+        return redirect('detalle_producto', pk=pk)
+
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES, instance=producto)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Producto actualizado con éxito!')
+            return redirect('detalle_producto', pk=pk)
+    else:
+        form = ProductoForm(instance=producto)
+    return render(request, 'myapp/form_producto.html', {'form': form, 'titulo': 'Editar Producto'})
+
+@login_required
+def eliminar_producto(request, pk):
+    producto = get_object_or_404(Producto, pk=pk)
+    # Verificar si el usuario logueado es el autor del producto
+    if request.user != producto.autor:
+        messages.error(request, 'No tienes permiso para eliminar este producto.')
+        return redirect('detalle_producto', pk=pk)
+
+    if request.method == 'POST':
+        producto.delete()
+        messages.success(request, 'Producto eliminado correctamente.')
+        return redirect('home') # O a la lista de productos
+    return render(request, 'myapp/confirm_delete.html', {'objeto': producto})
+
