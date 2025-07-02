@@ -1,6 +1,15 @@
 /* myapp/static/myapp/css/style.css */
+
 body {
-    background-color: #e9ecef; /* Un fondo más suave */
+    background-image: url('img/background.jpg'); /* ¡Esta línea DEBE ESTAR! */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* background-color: #e9ecef; /* Puedes comentar o quitar esta línea si solo quieres la imagen */
 }
 
 .navbar-brand {
@@ -10,6 +19,31 @@ body {
 .card {
     margin-top: 20px;
     border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.9); /* Para que el contenido sea legible sobre el fondo */
+}
+
+.form-control {
+    border-radius: 0.25rem;
+}
+
+.btn {
+    border-radius: 0.25rem;
+}
+
+/* Estilos para mensajes de Django */
+.messages .alert {
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+}
+
+/* También puedes añadir esto para el contenedor principal, si lo necesitas */
+.container {
+    background-color: rgba(255, 255, 255, 0.85); /* Fondo semi-transparente para el contenido principal */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .form-control {

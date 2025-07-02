@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirmar Eliminación{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="alert alert-warning text-center" role="alert">
+        <h4 class="alert-heading">¡Advertencia!</h4>
+        <p>Estás a punto de eliminar la sucursal: <strong>{{ sucursal.nombre }}</strong>.</p>
+        <p>Esta acción es irreversible.</p>
+        <hr>
+        <form action="{% url 'eliminar_sucursal' sucursal.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger me-2">Sí, Eliminar Permanentemente</button>
+            <a href="{% url 'lista_sucursales' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock content %}

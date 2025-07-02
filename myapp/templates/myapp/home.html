@@ -1,23 +1,31 @@
-{% extends 'myapp/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block titulo %}Inicio{% endblock %}
+{% block title %}Inicio{% endblock title%}
 
-{% block contenido %}
-<div class="jumbotron text-center bg-light py-5">
-    <h1 class="display-4">¡Bienvenido a Ohfer!</h1>
-    <p class="lead">Tu plataforma para explorar y gestionar productos y clientes.</p>
-    <hr class="my-4">
-    <p>Empieza a explorar o a gestionar tu negocio.</p>
-    <a class="btn btn-primary btn-lg" href="{% url 'lista_productos' %}" role="button">Ver Productos</a>
-    <a class="btn btn-success btn-lg" href="{% url 'crear_producto' %}" role="button">Crear Producto</a>
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center"> 
+        <div class="col-md-8 col-lg-6"> 
+            <div class="p-5 bg-light shadow rounded-3 text-center"> 
+                <h1 class="display-4 mb-3">¡Bienvenido a Ohfer!</h1>
+                <p class="lead">Tu plataforma para explorar, vender y comprar productos electrónicos.</p>
+                <hr class="my-4">
+                <p class="mb-4">¿Qué quieres hacer? ¡Regístrate ahora!</p>
+                
+                {% if not user.is_authenticated %}
+                    <a class="btn btn-primary btn-lg" href="{% url 'register' %}" role="button">Regístrate</a>
+                    <a class="btn btn-outline-secondary btn-lg ms-2" href="{% url 'login' %}" role="button">Inicia Sesión</a>
+                {% else %}
+                    <div class="d-grid gap-2 d-md-block">
+                        <a class="btn btn-info btn-lg mt-2" href="{% url 'crear_sucursal' %}" role="button">Crear Sucursal</a>
+                        <a class="btn btn-primary btn-lg mt-2 ms-md-2" href="{% url 'lista_productos' %}" role="button">Ver Productos</a>
+                        <a class="btn btn-success btn-lg mt-2 ms-md-2" href="{% url 'crear_producto' %}" role="button">Crear Producto</a>
+                    </div>
+                {% endif %}
 
-    
-    {% if user.is_authenticated %} {# Opcional: mostrar solo si el usuario está logueado #}
-    <a class="btn btn-info btn-lg mt-2" href="{% url 'crear_sucursal' %}" role="button">Crear Sucursal</a>
-    {% endif %}
-    {# ------------------------- #}
-
+            </div>
+        </div>
+    </div>
 </div>
-
-{% endblock %}
+{% endblock content %}

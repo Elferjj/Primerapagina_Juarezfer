@@ -1,9 +1,9 @@
-{% extends 'myapp/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block titulo %}Productos por Usuario{% endblock %}
+{% block title %}Productos por Usuario{% endblock title %}
 
-{% block contenido %}
+{% block content %}
 <div class="container mt-4">
     <h2 class="mb-4 text-center">Productos Publicados por Usuario</h2>
 
@@ -19,7 +19,7 @@
                         {% endif %}
                     </h4>
                     <ul class="list-group list-group-flush">
-                        {% for producto in user_obj.productos_publicados.all %} {# Accede a los productos relacionados #}
+                        {% for producto in user_obj.productos_publicados.all %} 
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
                                     <h5 class="mb-1">{{ producto.nombre }}</h5>
@@ -38,4 +38,4 @@
         <p class="text-center">No hay usuarios que hayan publicado productos.</p>
     {% endif %}
 </div>
-{% endblock %}
+{% endblock content %}

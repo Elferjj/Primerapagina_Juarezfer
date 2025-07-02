@@ -1,27 +1,36 @@
-{% extends 'myapp/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block titulo %}Sobre Ohfer - El Creador{% endblock %}
+{% block title %}Sobre Ohfer - El Creador{% endblock title %}
 
-{% block contenido %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow-sm p-4 mt-4">
-            <h2 class="card-title text-center mb-4">Sobre Ohfer y su Creador</h2>
-            <p class="lead text-center">
-                <strong>{{ creador_nombre }}</strong> es quien estuvo bajo este proyecto,
-                mismo actualmente se dedica como {{ creador_profesion }}
-                y que {{ dedicacion_curso }}
-            </p>
-            <hr>
-            <p class="text-muted text-center">
-                {{ objetivo_web }}
-            </p>
-            <div class="text-center mt-4">
-                <img src="{% static 'myapp/img/tu_foto_aqui.png' %}" alt="Foto del Creador" class="img-fluid rounded-circle" style="max-width: 150px; height: 150px; object-fit: cover;"> {# <-- Aquí se usa static #}
-                <p class="mt-2 text-muted small">¡Gracias por visitar!</p>
+{% block content %}
+<div class="container mt-4 mb-5"> 
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7"> 
+            <div class="card shadow p-4 mt-4 rounded-3 text-center"> 
+                <h2 class="card-title mb-4 text-primary">Sobre Ohfer y su Creador</h2> 
+                
+                <div class="text-center mb-4">
+                    <img src="{% static 'myapp/css/img/tu_foto_aqui.png' %}" 
+                         alt="Foto del Creador" 
+                         class="img-fluid rounded-circle border border-3 border-primary" 
+                         style="max-width: 150px; height: 150px; object-fit: cover;"> 
+
+                <p class="lead mb-3">
+                    <strong>{{ creador_nombre }}</strong> es quien estuvo bajo este proyecto,
+                    mismo actualmente se dedica como {{ creador_profesion }}
+                    y que {{ dedicacion_curso }}
+                </p>
+                
+                <hr class="my-4"> 
+                
+                <p class="text-muted fst-italic"> 
+                    {{ objetivo_web }}
+                </p>
+                
+                <p class="mt-4 text-success fw-bold">¡Gracias por visitar!</p> 
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock content%}

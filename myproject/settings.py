@@ -59,10 +59,12 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -121,7 +123,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static_global', # Ejemplo: una carpeta 'static_global' en la raíz del proyecto
+    os.path.join(BASE_DIR, 'static'), 
 ]
 
 # Default primary key field type
@@ -132,8 +134,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-LOGIN_REDIRECT_URL = 'home' # A dónde va el usuario después de iniciar sesión exitosamente
-LOGOUT_REDIRECT_URL = 'home' # A dónde va el usuario después de cerrar sesión
+LOGIN_REDIRECT_URL = 'inicio' # A dónde va el usuario después de iniciar sesión exitosamente
+LOGOUT_REDIRECT_URL = 'inicio' # A dónde va el usuario después de cerrar sesión
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

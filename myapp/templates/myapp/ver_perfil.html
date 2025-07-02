@@ -1,41 +1,45 @@
-{% extends 'myapp/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block titulo %}Perfil de {{ usuario.username }}{% endblock %}
+{% block title %}Perfil de {{ usuario.username }}{% endblock title %}
 
-{% block contenido %}
+{% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card shadow-sm p-4 mt-4">
             <h2 class="card-title text-center mb-4">Perfil de {{ usuario.username }}</h2>
             <div class="text-center mb-4">
-                {% if usuario.perfilusuario.avatar %}
-                    <img src="{{ usuario.perfilusuario.avatar.url }}" alt="Avatar de {{ usuario.username }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                {# Cambiado de usuario.perfilusuario.avatar a usuario.profile.avatar #}
+                {% if usuario.profile.avatar %}
+                    <img src="{{ usuario.profile.avatar.url }}" alt="Avatar de {{ usuario.username }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
                 {% else %}
                     <img src="{% static 'myapp/img/default_avatar.png' %}" alt="Avatar por defecto" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
                 {% endif %}
                 <h3 class="mt-2">{{ usuario.get_full_name|default:usuario.username }}</h3>
                 <p class="text-muted">@{{ usuario.username }}</p>
-                {% if usuario.perfilusuario.telefono %}
-                    <p class="text-muted"><i class="fas fa-phone"></i> {{ usuario.perfilusuario.telefono }}</p>
+                {# Cambiado de usuario.perfilusuario.telefono a usuario.profile.telefono #}
+                {% if usuario.profile.telefono %}
+                    <p class="text-muted"><i class="fas fa-phone"></i> {{ usuario.profile.telefono }}</p>
                 {% endif %}
             </div>
 
             <div class="mt-4">
                 <h4>Acerca de:</h4>
-                {% if usuario.perfilusuario.descripcion %}
-                    <p>{{ usuario.perfilusuario.descripcion }}</p>
+                {# Cambiado de usuario.perfilusuario.descripcion a usuario.profile.descripcion #}
+                {% if usuario.profile.descripcion %}
+                    <p>{{ usuario.profile.descripcion }}</p>
                 {% else %}
                     <p class="text-muted">Este usuario aún no ha añadido una descripción.</p>
                 {% endif %}
 
-                {% if usuario.perfilusuario.link_web %}
-                    <p><strong>Sitio Web:</strong> <a href="{{ usuario.perfilusuario.link_web }}" target="_blank">{{ usuario.perfilusuario.link_web }}</a></p>
+                {# Cambiado de usuario.perfilusuario.link_web a usuario.profile.link_web #}
+                {% if usuario.profile.link_web %}
+                    <p><strong>Sitio Web:</strong> <a href="{{ usuario.profile.link_web }}" target="_blank">{{ usuario.profile.link_web }}</a></p>
                 {% endif %}
             </div>
-
-            {# Opcional: Mostrar productos publicados por este usuario #}
+            
             <h4 class="mt-5">Productos Publicados:</h4>
+            {# Esto está bien, usuario.producto_set.all asume que tu modelo Producto tiene un ForeignKey a User #}
             {% if usuario.producto_set.all %}
                 <ul class="list-group">
                     {% for producto in usuario.producto_set.all %}
@@ -50,4 +54,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}

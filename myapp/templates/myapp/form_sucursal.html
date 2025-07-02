@@ -1,9 +1,8 @@
-{% extends 'myapp/base.html' %}
-{#% load crispy_forms_tags %} {# Opcional: si usas django-crispy-forms #}
+{% extends 'base.html' %}
 
-{% block titulo %}{{ sucursales }}{% endblock %}
+{% block title %}{{ sucursales }}{% endblock title %}
 
-{% block contenido %}
+{% block content %}
 <div class="card shadow-sm p-4">
     <h2 class="card-title text-center mb-4">{{ titulo }}</h2>
     <form method="post">
@@ -12,4 +11,4 @@
         <button type="submit" class="btn btn-primary w-100 mt-3">Guardar</button>
     </form>
 </div>
-{% endblock %}
+{% endblock content %}

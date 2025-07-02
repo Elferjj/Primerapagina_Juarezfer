@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lista de Clientes{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Nuestros Clientes</h2>
+
+    {% if clientes %}
+        <ul class="list-group">
+            {% for cliente in clientes %}
+                <li class="list-group-item">
+                    {{ cliente.nombre }} {{ cliente.apellido }} ({{ cliente.email }}) - Teléfono: {{ cliente.telefono }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-center">No hay clientes registrados aún.</p>
+    {% endif %}
+</div>
+{% endblock content %}

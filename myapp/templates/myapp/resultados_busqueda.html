@@ -1,8 +1,8 @@
-{% extends 'myapp/base.html' %}
+{% extends 'base.html' %}
 
-{% block titulo %}Resultados de Búsqueda{% endblock %}
+{% block title %}Resultados de Búsqueda{% endblock title %}
 
-{% block contenido %}
+{% block content %}
 <h2 class="mb-4">Resultados de Búsqueda</h2>
 
 <div class="card shadow-sm p-4 mb-4">
@@ -65,4 +65,4 @@
     <p class="alert alert-secondary">Ingresa un término de búsqueda en el campo de arriba.</p>
 {% endif %}
 
-{% endblock %}
+{% endblock content %}

@@ -1,22 +1,43 @@
-{% extends 'myapp/base.html' %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block titulo %}Iniciar Sesión en Ohfer{% endblock %}
+{% block title %}Iniciar Sesión en Ohfer{% endblock title %}
 
-{% block contenido %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow-sm p-4 mt-4">
-            <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
-            <form method="post">
-                {% csrf_token %}
-                {{ form|crispy }} 
-                <button type="submit" class="btn btn-success w-100 mt-3">Iniciar Sesión</button>
-            </form>
-            <small class="text-muted text-center mt-3">
-                ¿No tienes una cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a>
-            </small>
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100 py-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card shadow-lg p-4 p-md-5" style="border-radius: 15px;">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
+                    <p class="text-center text-muted mb-4">Ingresa tus credenciales para acceder a tu cuenta.</p>
+
+                    {% if messages %}
+                        <div class="mb-3">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Acceder</button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="text-muted">¿No tienes una cuenta? <a href="{% url 'register' %}" class="text-decoration-none">Regístrate aquí</a></p>
+                        
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}

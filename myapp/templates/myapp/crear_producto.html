@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block title %}Crear Producto{% endblock title %} 
+
+{% block content %}
+    <h1>Crear Nueva Publicación</h1>
+    <form method="post" enctype="multipart/form-data"> 
+        {% csrf_token %} 
+
+        
+        {{ form.as_p }} 
+
+        <button type="submit">Publicar Producto</button>
+    </form>
+{% endblock content %}

@@ -1,37 +1,63 @@
-{% extends 'myapp/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block titulo %}Todos los Productos{% endblock %}
+{% block title %}Lista de Productos{% endblock title%}
 
-{% block contenido %}
-<h2 class="mb-4">Productos en Venta</h2>
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Todos Nuestros Productos</h2>
 
-{% if productos %}
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row">
         {% for producto in productos %}
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                {% if producto.imagen %}
-                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 200px; object-fit: cover;">
-                {% else %}
-                    <img src="{% static 'myapp/img/default_product.png' %}" class="card-img-top" alt="Producto sin imagen" style="height: 200px; object-fit: cover;">
-                {% endif %}
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ producto.nombre }}</h5>
-                    <p class="card-text text-muted small">Publicado por <a href="{% url 'ver_perfil' username=producto.autor.username %}">@{{ producto.autor.username }}</a> el {{ producto.fecha_publicacion|date:"d M, Y" }}</p>
-                    <p class="card-text"><strong>Precio:</strong> ${{ producto.precio }}</p>
-                    <p class="card-text"><strong>Stock:</strong> {{ producto.stock }}</p>
-                    <div class="mt-auto">
-                        <a href="{% url 'detalle_producto' producto.pk %}" class="btn btn-primary btn-sm">Ver Más</a>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'myapp/img/default_product.png' %}" class="card-img-top" alt="Imagen por defecto" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text text-muted">{{ producto.descripcion|truncatechars:70 }}</p>
+                        <p class="card-text"><strong>Precio: ${{ producto.precio }}</strong></p>
+                        <p class="card-text small text-end text-muted">Publicado el: {{ producto.fecha_publicacion|date:"d M Y H:i" }}</p>
+                        
+                        {# --- ¡BLOQUE CORREGIDO DEL AUTOR/VENDEDOR! --- #}
+                        {% if producto.autor %} {# Si el producto tiene un autor asignado #}
+                            <div class="d-flex align-items-center mt-2">
+                                {# Enlace al perfil del autor #}
+                                <a href="{% url 'ver_perfil' username=producto.autor.username %}" 
+                                   class="d-flex align-items-center text-decoration-none text-dark">
+                                    
+                                    {# Avatar del autor #}
+                                    {% if producto.autor.profile.avatar %} {# ¡CORREGIDO! 'profile' en minúscula #}
+                                        <img src="{{ producto.autor.profile.avatar.url }}" 
+                                             alt="Avatar de {{ producto.autor.username }}" 
+                                             class="rounded-circle me-2" 
+                                             style="width: 30px; height: 30px; object-fit: cover;">
+                                    {% else %}
+                                        <img src="{% static 'myapp/img/default_avatar.png' %}" 
+                                             alt="Avatar por defecto" 
+                                             class="rounded-circle me-2" 
+                                             style="width: 30px; height: 30px; object-fit: cover;">
+                                    {% endif %}
+                                    
+                                    {# Nombre de usuario del autor #}
+                                    <small>Vendido por: {{ producto.autor.username }}</small>
+                                </a>
+                            </div>
+                        {% endif %}
+                        {# -------------------------- #}
+                        
+                        <div class="mt-auto pt-3">
+                            <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% empty %}
+            <p class="text-center">No hay productos disponibles aún.</p>
         {% endfor %}
     </div>
-{% else %}
-    <div class="alert alert-info" role="alert">
-        No hay productos publicados aún. ¡Sé el primero en <a href="{% url 'crear_producto' %}" class="alert-link">publicar uno</a>!
-    </div>
-{% endif %}
-{% endblock %}
+</div>
+{% endblock content%}

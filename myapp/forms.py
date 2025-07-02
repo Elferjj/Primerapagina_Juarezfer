@@ -1,9 +1,10 @@
 from django import forms
 from .models import Cliente, Producto, Sucursal, Vendedor
-from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
-from .models import PerfilUsuario
+from .models import Profile
+from crispy_forms.helper import FormHelper 
+from crispy_forms.layout import Layout, Submit, Field
 
 class ClienteForm(forms.ModelForm):
     class Meta:
@@ -19,7 +20,7 @@ class ClienteForm(forms.ModelForm):
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = ['nombre', 'descripcion', 'precio', 'stock', 'imagen'] 
+        fields = ['nombre', 'descripcion', 'precio','imagen'] 
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del producto'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Descripción del producto'}),
@@ -66,7 +67,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     def save(self, commit=True):
         
-        user = super().save(commit=False) # Importante: No guardar en la base de datos aún
+        user = super().save(commit=False) 
 
     
         user.first_name = self.cleaned_data['first_name']
@@ -86,28 +87,75 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 
-class PerfilUsuarioForm(forms.ModelForm):
-    class Meta:
-        model = PerfilUsuario
-        fields = ['descripcion', 'link_web', 'avatar', 'telefono']
-        widgets = {
-            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Cuentanos un poco sobre ti...'}),
-            'link_web': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Ej: https://tupagina.com'}),
-            'telefono': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Número de teléfono'}),
-            'avatar': forms.FileInput(attrs={'class': 'form-control'}), # Para subir archivos
-        }
-
-# Para modificar los campos base del usuario (nombre, apellido, email)
 class UserEditForm(UserChangeForm):
-    password = None # No queremos que la contraseña se muestre o sea editable aquí
+    password = None 
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
-        widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-        }
+        fields = ('username', 'email', 'first_name', 'last_name') 
 
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('avatar',) 
+
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField(required=True) 
+
+    class Meta:
+        model = User
+        fields = ['username', 'email'] 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('username'),
+            Field('email'),
+            Field('password'), 
+            Field('password2'), 
+            Submit('submit', 'Registrarse', css_class='btn btn-success mt-3')
+        )
+
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Este email ya está registrado.")
+        return email
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    
+    avatar = forms.ImageField(required=False) 
+
+    class Meta:
+        model = Profile
+        fields = ['avatar'] 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('avatar'),
+            
+            Submit('submit', 'Actualizar Perfil', css_class='btn btn-primary mt-3')
+        )
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField() 
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email'] 
+        
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    
+
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'descripcion', 'telefono', 'link_web'] 
+        
