@@ -1,4 +1,7 @@
 Primerapagina_Juarezfer
+
+
+
 Este proyecto es una aplicación web desarrollada con el framework Django, diseñada para explorar las funcionalidades básicas de un sistema de gestión de usuarios, productos y sucursales.
 
 Cómo Empezar
