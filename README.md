@@ -66,3 +66,7 @@ myapp/: Tu aplicación principal, contiene los modelos (models.py), vistas (view
 media/: Directorio para los archivos subidos por los usuarios (ej. avatares, imágenes de productos).
 
 static/: Directorio para los archivos estáticos de tu aplicación (CSS, JavaScript, imágenes).
+
+Video del proyecto 
+
+https://youtu.be/9Miwc2oQpzk

@@ -217,8 +217,8 @@ def eliminar_producto(request, pk):
     if request.method == 'POST':
         producto.delete()
         messages.success(request, 'Producto eliminado correctamente.')
-        return redirect('home') 
-    return render(request, 'myapp/confirm_delete.html', {'objeto': producto})
+        return redirect('inicio') 
+    return render(request, 'myapp/confirm_delete.html', {'producto': producto})
 
 def lista_productos_por_cliente(request):
     
